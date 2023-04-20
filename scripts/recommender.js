@@ -37,6 +37,7 @@ searchBtn.addEventListener("click", function () {
 
     displayCards(response);
     createLineChart(response);
+    generateBubbleChart(response);
 })
 
 
@@ -262,6 +263,20 @@ function displayCards(response) {
 
 }
 
+
+
+function generateRandomColor() {
+    // Generate a random number for each color component (red, green, blue)
+    var red = Math.floor(Math.random() * 256);
+    var green = Math.floor(Math.random() * 256);
+    var blue = Math.floor(Math.random() * 256);
+
+    // Combine the color components into a CSS color string
+    var color = "rgba(" + red + ", " + green + ", " + blue + ", 0.4)";
+
+    return color;
+}
+
 function createLineChart(response) {
     var chartData = {
         labels: ['Total Fat', 'Saturated Fat', 'Cholesterol', 'Sodium', 'Total Carbohydrates', 'Fiber Content', 'Sugar', 'Protein'],
@@ -299,6 +314,11 @@ function createLineChart(response) {
 
     // Set options for the chart
     var options = {
+        title: {
+            display: true,
+            text: 'Nutrient Content Comparison between Recipes',
+            fontSize: 36
+        },
         scale: {
             ticks: {
                 beginAtZero: true,
@@ -320,15 +340,98 @@ function createLineChart(response) {
     });
 }
 
+function generateBubbleChart() {
 
-function generateRandomColor() {
-    // Generate a random number for each color component (red, green, blue)
-    var red = Math.floor(Math.random() * 256);
-    var green = Math.floor(Math.random() * 256);
-    var blue = Math.floor(Math.random() * 256);
+    var data = {
+        datasets: []
+    };
 
-    // Combine the color components into a CSS color string
-    var color = "rgba(" + red + ", " + green + ", " + blue + ", 0.2)";
+    // Loop through the recipe data and create a separate dataset for each recipe
+    for (var i = 0; i < response.length; i++) {
+        var recipe = response[i];
+        prep_time = parseInt(recipe.prep_time.substr(2), 10);
+        cook_time = parseInt(recipe.cook_time.substr(2), 10)
+        var dataset = {
+            label: recipe.name,
+            backgroundColor: generateRandomColor(),
+            data: [{
+                x: prep_time,
+                y: cook_time,
+                r: prep_time + cook_time
+            }]
+        };
+        data.datasets.push(dataset);
+    }
 
-    return color;
+    // Set options for the chart
+    var options = {
+        title: {
+            display: true,
+            text: 'Recipe Prep Time vs. Cook Time',
+            fontSize: 36
+        },
+        scales: {
+            x: {
+                ticks: {
+                    beginAtZero: true,
+                    font: {
+                        size: 14
+                    }
+                }
+            },
+            y: {
+                ticks: {
+                    beginAtZero: true,
+                    font: {
+                        size: 14
+                    }
+                }
+            }
+        },
+        plugins: {
+            legend: {
+                display: true,
+                position: 'top',
+                labels: {
+                    usePointStyle: true
+                }
+            }
+        },
+        datalabels: {
+            display: true,
+            formatter: function (value, context) {
+                return context.dataset.label;
+            }
+        },
+        responsive: true,
+        maintainAspectRatio: true,
+        layout: {
+            padding: {
+                left: 100,
+                right: 100,
+                top: 100,
+                bottom: 100
+            }
+        }
+    };
+
+    // Get the canvas element and create the chart
+    var ctx = document.getElementById('myChart2').getContext('2d');
+    var myBubbleChart = new Chart(ctx, {
+        type: 'bubble',
+        data: data,
+        options: options
+    });
+    // Add x and y axis labels using JavaScript
+    var xLabel = document.createElement('div');
+    xLabel.className = 'chart-x-axis-label';
+    xLabel.innerText = 'Prep Time (minutes)';
+    document.getElementById('myChart2').parentNode.appendChild(xLabel);
+
+    var yLabel = document.createElement('div');
+    yLabel.className = 'chart-y-axis-label';
+    yLabel.innerText = 'Cook Time (minutes)';
+    document.getElementById('myChart2').parentNode.appendChild(yLabel);
 }
+
+

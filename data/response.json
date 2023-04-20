@@ -38,7 +38,7 @@
         "id": 2,
         "name": "Cabbage Soup",
         "author_name": "Duckie067",
-        "cook_time": "PT30M",
+        "cook_time": "PT60M",
         "prep_time": "PT20M",
         "recipe_category": "Vegetable",
         "ingredients": [
@@ -72,7 +72,7 @@
         "id": 3,
         "name": "Warm Chicken A La King",
         "author_name": "Joan Edington",
-        "cook_time": "PT3M",
+        "cook_time": "PT10M",
         "prep_time": "PT35M",
         "recipe_category": "Chicken",
         "ingredients": [
