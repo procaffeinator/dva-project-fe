@@ -34,7 +34,9 @@ searchBtn.addEventListener("click", function () {
     //     });
 
     cardContainer.innerHTML = "";
+
     displayCards(response);
+    createLineChart(response);
 })
 
 
@@ -74,6 +76,13 @@ function displayCards(response) {
         cardButton.href = '#';
         cardButton.textContent = 'See Detailed View';
         cardBody.appendChild(cardButton);
+
+        // Create nutrient button
+        const nutButton = document.createElement('a');
+        nutButton.classList.add('btn', 'btn-primary', 'mt-2');
+        nutButton.href = '#';
+        nutButton.textContent = 'See Nutrient Analysis';
+        cardBody.appendChild(nutButton);
 
         card.appendChild(cardBody);
 
@@ -124,6 +133,107 @@ function displayCards(response) {
             </div>
         </div>`;
 
+        // Create nutrient modal element
+        const nutModal = document.createElement('div');
+        nutModal.classList.add('modal');
+        nutModal.tabIndex = -1;
+        nutModal.role = 'dialog';
+        nutModal.setAttribute('aria-labelledby', 'nutModalTitle');
+        nutModal.setAttribute('aria-modal', true);
+        nutModal.innerHTML = `
+<div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="nutModalTitle">${item.name} Nutrient Analysis</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+    <canvas id="myChart-${item.id}" class="nutrition-chart"></canvas>
+</div>
+    </div>
+</div>`;
+
+        // Append nutrient modal to container
+        cardContainer.appendChild(nutModal);
+
+        // Add event listener to show nutrient modal on button click
+        nutButton.addEventListener('click', () => {
+            nutModal.classList.add('show');
+            nutModal.style.display = 'block';
+        });
+
+        // Add event listener to hide nutrient modal on close button click or outside click
+        const closeNutModal = () => {
+            nutModal.classList.remove('show');
+            nutModal.style.display = 'none';
+        };
+
+        const nutModalCloseBtn = nutModal.querySelector('.close');
+        nutModalCloseBtn.addEventListener('click', closeNutModal);
+
+        window.addEventListener('click', (event) => {
+            if (event.target === nutModal) {
+                closeNutModal();
+            }
+        });
+
+        let dataArray = [];
+
+        keys = ["fat_content", "saturated_fat_content", "cholestrol_content", "sodium_content", "carbohydrate_content", "fiber_content", "sugar_content", "protein_content"];
+        for (let i = 0; i < keys.length; i++) {
+            const key = keys[i];
+            dataArray.push(item[key]);
+        }
+
+        // Get the canvas element
+        var ctx = document.getElementById(`myChart-${item.id}`).getContext("2d");
+
+
+        // Set the data for the chart
+        var data = {
+            labels: [
+                "Fat Content",
+                "Saturated Fat Content",
+                "Cholesterol Content",
+                "Sodium Content",
+                "Carbohydrate Content",
+                "Fiber Content",
+                "Sugar Content",
+                "Protein Content"
+            ],
+            datasets: [
+                {
+                    label: "Nutrition Data",
+                    backgroundColor: "rgba(75,192,192,0.4)",
+                    borderColor: "rgba(75,192,192,1)",
+                    borderWidth: 1,
+                    data: dataArray
+                }
+            ]
+        };
+
+        min_value = Math.min(...dataArray)
+        // Set the options for the chart
+        var options = {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        suggestedMin: min_value
+                    }
+                }]
+            }
+        };
+
+
+        // Create the chart
+        var myChart = new Chart(ctx, {
+            type: "bar",
+            data: data,
+            options: options
+        });
+
         // Append card and modal to container
         cardContainer.appendChild(card);
         cardContainer.appendChild(modal);
@@ -150,4 +260,75 @@ function displayCards(response) {
         });
     });
 
+}
+
+function createLineChart(response) {
+    var chartData = {
+        labels: ['Total Fat', 'Saturated Fat', 'Cholesterol', 'Sodium', 'Total Carbohydrates', 'Fiber Content', 'Sugar', 'Protein'],
+        datasets: []
+    };
+
+    let dataArray = [];
+
+    keys = ["fat_content", "saturated_fat_content", "cholestrol_content", "sodium_content", "carbohydrate_content", "fiber_content", "sugar_content", "protein_content"];
+    for (let j = 0; j < response.length; j++) {
+        item = response[j];
+        data = []
+        for (let i = 0; i < keys.length; i++) {
+            const key = keys[i];
+            data.push(item[key]);
+        }
+        dataArray.push(data);
+    }
+
+    // Loop through the data arrays for each recipe and add them to the chart data
+    for (var i = 0; i < dataArray.length; i++) {
+        color = generateRandomColor();
+        var dataset = {
+            label: response[i].name,
+            backgroundColor: color,
+            borderColor: color,
+            pointBackgroundColor: color,
+            pointBorderColor: color,
+            pointHoverBackgroundColor: color,
+            pointHoverBorderColor: color,
+            data: dataArray[i]
+        };
+        chartData.datasets.push(dataset);
+    }
+
+    // Set options for the chart
+    var options = {
+        scale: {
+            ticks: {
+                beginAtZero: true,
+                maxTicksLimit: 5,
+                suggestedMax: 40,
+                stepSize: 10
+            }
+        },
+        maintainAspectRatio: true
+    };
+
+    // Get the canvas element and create the chart
+    var ctx = document.getElementById('myChart1').getContext('2d');
+    console.log(ctx)
+    var myRadarChart = new Chart(ctx, {
+        type: 'radar',
+        data: chartData,
+        options: options
+    });
+}
+
+
+function generateRandomColor() {
+    // Generate a random number for each color component (red, green, blue)
+    var red = Math.floor(Math.random() * 256);
+    var green = Math.floor(Math.random() * 256);
+    var blue = Math.floor(Math.random() * 256);
+
+    // Combine the color components into a CSS color string
+    var color = "rgba(" + red + ", " + green + ", " + blue + ", 0.2)";
+
+    return color;
 }
