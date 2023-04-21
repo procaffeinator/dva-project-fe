@@ -40,7 +40,7 @@
         "author_name": "Duckie067",
         "cook_time": "PT30M",
         "prep_time": "PT20M",
-        "recipe_category": "Vegetable",
+        "recipe_category": "Beverages",
         "ingredients": [
             "plain tomato juice",
             "cabbage",
@@ -74,7 +74,7 @@
         "author_name": "Joan Edington",
         "cook_time": "PT3M",
         "prep_time": "PT35M",
-        "recipe_category": "Chicken",
+        "recipe_category": "Beverages",
         "ingredients": [
             "chicken",
             "butter",
@@ -117,7 +117,7 @@
         "author_name": "tristitia",
         "cook_time": "PT50M",
         "prep_time": "PT30M",
-        "recipe_category": "Pie",
+        "recipe_category": "Beverages",
         "ingredients": [
             "sugar",
             "margarine",
@@ -173,8 +173,6 @@
             "whole cloves",
             "whole coriander seed"
         ],
-
-
         "keywords": "< 60 Mins",
         "calories": 69.2,
         "fat_content": 3.8,
@@ -195,6 +193,5 @@
             "(The tea becomes spicier as it sits, may want to strain out spices)."
         ],
         "image": "assets/N.png"
-
     }
 ]

@@ -2,12 +2,7 @@
     float: left;
     width: 16%;
     margin-bottom: 16px;
-    padding: 0 8px;
-}
-
-.logo {
-    float: left;
-    margin-right: 10px;
+    padding: 0 6px;
 }
 
 .container {
@@ -31,7 +26,7 @@
 
 #search-btn {
     padding: 10px;
-    font-size: 16px;
+    font-size: 14px;
     background-color: #6591bf;
     color: #fff;
     border: none;
@@ -43,16 +38,17 @@
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 20px;
-    padding: 20px;
+    gap: 10px;
+    padding: 10px;
     border: 1px solid #ccc;
     border-radius: 10px;
     margin: 0 auto;
 }
 
 .card {
-    width: 15rem;
-    margin: 10px;
+    width: 11rem;
+    margin: 3px;
+    position: relative;
 }
 
 .container::after,
@@ -70,12 +66,13 @@
     border: none;
     outline: 0;
     display: inline-block;
-    padding: 8px;
+    padding: 2px;
     color: white;
-    background-color: #605788;
+    background-color: #6591bf;
     text-align: center;
     cursor: pointer;
     width: 100%;
+    border-radius: 10px;
 }
 
 .button:hover {

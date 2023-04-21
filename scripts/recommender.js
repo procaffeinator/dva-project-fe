@@ -1,6 +1,6 @@
 let response;
 
-fetch('data/response.json')
+fetch('data/response_abhi.json')
     .then(response => {
         if (response.ok) {
             return response.json();
@@ -73,14 +73,14 @@ function displayCards(response) {
 
         // Create card button
         const cardButton = document.createElement('a');
-        cardButton.classList.add('btn', 'btn-primary');
+        cardButton.classList.add('button');
         cardButton.href = '#';
         cardButton.textContent = 'See Detailed View';
         cardBody.appendChild(cardButton);
 
         // Create nutrient button
         const nutButton = document.createElement('a');
-        nutButton.classList.add('btn', 'btn-primary', 'mt-2');
+        nutButton.classList.add('button', 'mt-2');
         nutButton.href = '#';
         nutButton.textContent = 'See Nutrient Analysis';
         cardBody.appendChild(nutButton);
@@ -185,7 +185,10 @@ function displayCards(response) {
         keys = ["fat_content", "saturated_fat_content", "cholestrol_content", "sodium_content", "carbohydrate_content", "fiber_content", "sugar_content", "protein_content"];
         for (let i = 0; i < keys.length; i++) {
             const key = keys[i];
-            dataArray.push(item[key]);
+            if (item[key] > 10)
+                dataArray.push(item[key]);
+            else
+                dataArray.push(item[key] * 2);
         }
 
         // Get the canvas element
