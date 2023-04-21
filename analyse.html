@@ -75,9 +75,8 @@
 
         #dropdown-container {
             position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
+            top: 45px;
+            right: 200px;
             z-index: 1;
             display: flex;
             align-items: center;
@@ -85,6 +84,7 @@
 
         #dropdown-container label {
             margin-right: 10px;
+            margin-top: 7px;
         }
 
         label {
@@ -98,7 +98,7 @@
 
         select {
             padding: 7px;
-            font-size: 1em;
+            font-size: 0.8em;
             border: none;
             border-radius: 5px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
@@ -164,11 +164,13 @@
         </div>
     </nav>
     <div id="chart-container">
+        <div id="heatmap"></div>
         <div id="dropdown-container">
             <label for="category-select">Select Category:</label>
             <select id="category-select"></select>
+            <div id="nutrient-checkboxes"></div>
         </div>
-        <div id="heatmap"></div>
+
     </div>
     <script src="scripts/analytics.js"></script>
 </body>

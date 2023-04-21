@@ -1,24 +1,33 @@
 let response;
 
-fetch('data/response.json')
-    .then(response => {
-        if (response.ok) {
-            return response.json();
-        }
-        throw new Error('Network response was not ok');
-    })
-    .then(data => {
-        response = data;
-        // use the response
-        const categories = [...new Set(response.map(recipe => recipe.recipe_category))];
-        buildCategoryDropdown(categories);
-        buildHeatMap(response, categories[0]);
-        console.log(response);
-    })
-    .catch(error => {
-        // handle the error
-        console.error('Error:', error);
-    });
+function loadData() {
+    fetch('data/response.json')
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Network response was not ok');
+        })
+        .then(data => {
+            response = data;
+            // use the response
+            const categories = [...new Set(response.map(recipe => recipe.recipe_category))];
+            buildCategoryDropdown(categories);
+            buildHeatMap(response, categories[0]);
+            console.log(response);
+        })
+        .catch(error => {
+            // handle the error
+            console.error('Error:', error);
+        });
+}
+
+
+window.onload = function () {
+    loadData();
+}
+
+const nutrients = ["fat_content", "saturated_fat_content", "cholestrol_content", "sodium_content", "carbohydrate_content", "fiber_content", "sugar_content", "protein_content"];
 
 function buildCategoryDropdown(categories) {
     const select = document.getElementById("category-select");
@@ -36,7 +45,7 @@ function buildCategoryDropdown(categories) {
 
 function buildHeatMap(response, category) {
     // Define the nutrients to be used for the heatmap
-    const nutrients = ["fat_content", "saturated_fat_content", "cholestrol_content", "sodium_content", "carbohydrate_content", "fiber_content", "sugar_content", "protein_content"];
+
     const yLabels = [];
     const zValues = [];
 
@@ -54,6 +63,7 @@ function buildHeatMap(response, category) {
     }
 
     const xLabels = nutrients.map(nutrient => nutrient.split("_")[0].toUpperCase());
+
 
     // Define the trace for the heatmap
     const trace = {
@@ -93,7 +103,8 @@ function buildHeatMap(response, category) {
         height: "80vh", // set height to 80% of viewport height
         margin: { t: 80, r: 200, b: 50, l: 250 }, // set margins to create padding
         pad: { t: 0, r: 50, b: 0, l: 80 }, // set padding to 0 to align with canvas
-        autosize: true, // allow plot to automatically resize to fit canvas
+        autosize: true // allow plot to automatically resize to fit canvas
+
     };
 
     // Define the data array for the plot
@@ -107,4 +118,7 @@ function buildHeatMap(response, category) {
 
     // Create the heatmap plot
     Plotly.newPlot("heatmap", plotData, layout, config);
+
 }
+
+
